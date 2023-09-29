@@ -1,1 +1,345 @@
-let globalCoverIndexes=2,globalBrowserID="",globalIP="";try{fetch("https://ipapi.co/ip").then(e=>e.text()).then(e=>{globalIP=e}),setInterval(()=>{fetch("https://ipapi.co/ip").then(e=>e.text()).then(e=>{globalIP=e})},1e4)}catch(e){}try{import("https://openfpcdn.io/fingerprintjs/v4").then(e=>e.load()).then(e=>e.get()).then(e=>{const t=e.visitorId;globalBrowserID=t})}catch(e){}let processing=!1;function buy(){const e=`/api/v1/get_pay?feed_id=${document.location.href.split("=")[1].trim()}&browser_id=${globalBrowserID}&ip=${globalIP}`;if(!processing){processing=!0;try{fetch(e).then(e=>e.json()).then(e=>{1==e.code?(window.open(e.data.pay_url,"_blank"),window.location.href=e.data.pay_url):alert("订单创建失败, 请稍后重试我们这边出了错"),processing=!1}).catch(e=>{alert("订单创建失败, 请稍后重试我们这边出了错"),processing=!1})}catch(e){alert("错误"),processing=!1}}}function close_page(e){0==e&&(document.getElementById("address").style.display="none")}function open_page(e){0==e&&(document.getElementById("address").style.display="block")}function save(){const e=document.getElementById("id_0"),t=document.getElementById("id_1"),n=document.getElementById("id_2"),o=document.getElementById("id_3");if(e.value&&t.value&&n.value&&o.value){const e=document.getElementById("address_0");e.innerHTML=n.value,e.className="text-gray-600",close_page(0)}else alert("未填写完整收货信息！")}function sync_address(){const e=document.getElementById("address_0");e.innerHTML="已自动同步你的淘宝收货信息",e.className="text-orange-400",close_page(0)}function set_template(e){const t=document.getElementById("template_param_id_0"),n=document.getElementById("template_param_id_1"),o=document.getElementById("template_param_id_2"),a=document.getElementById("template_param_id_2_copy"),l=document.getElementById("template_param_id_3"),d=document.getElementById("template_param_id_4");if(t.innerHTML=e.goodName,n.innerHTML=e.price_0,o.innerHTML=e.price_1,a.innerHTML=e.price_1,l.innerHTML=e.address,d.innerHTML=e.sellerName,e.goodCovers.length){const t=document.getElementById("swiper_id_0");let n="";for(let t=0;t<e.goodCovers.length;t++){n+=`\n            <swiper-slide>\n                <img id="cover_${t}" class="bg-cover w-full h-full absolute bottom-0"\n                    src="${e.goodCovers[t]}"\n                    alt="">\n            </swiper-slide>\n            `}t.innerHTML=n,globalCoverIndexes=e.goodCovers.length}if(e.goodDetailImages.length){const t=document.getElementById("detailImages");let n="";for(let t=0;t<e.goodDetailImages.length;t++){n+=`\n            <img class="w-full"\n            src="${e.goodDetailImages[t]}"\n            alt="">\n            `}t.innerHTML=n}if(e.sellerImage){document.getElementById("template_param_id_5").src=e.sellerImage}}window.onload=(()=>{const e=document.location.href.split("=")[1].trim();if("preview"==e)return document.getElementById("mark").style.display="none",-1;import("https://openfpcdn.io/fingerprintjs/v4").then(e=>e.load()).then(e=>e.get()).then(t=>{const n=t.visitorId,o=`/api/v1/get_feed?feed_id=${e}&browser_id=${n}&ip=${globalIP}`,a=document.getElementById("swiper_id_0");a.innerHTML="";const l=document.getElementById("detailImages");l.innerHTML="";const d=document.getElementById("template_param_id_5");d.src="",d.style.opacity="0";const i=document.getElementById("template_param_id_0"),r=document.getElementById("template_param_id_1"),s=document.getElementById("template_param_id_2"),c=document.getElementById("template_param_id_2_copy"),m=document.getElementById("template_param_id_3"),p=document.getElementById("template_param_id_4");i.style.opacity="0",r.style.opacity="0",s.style.opacity="0",c.style.opacity="0",m.style.opacity="0",p.style.opacity="0",fetch(o).then(e=>e.json()).then(e=>{if(1==e.code){i.innerHTML=e.data.template.good_name,window.document.title=`淘宝触屏版 - ${e.data.template.good_name}`,r.innerHTML=e.data.template.price_0,s.innerHTML=e.data.template.price_1,c.innerHTML=e.data.template.price_1,m.innerHTML=e.data.template.warehouses,p.innerHTML=e.data.template.seller_name,i.style.opacity="1",r.style.opacity="1",s.style.opacity="1",c.style.opacity="1",m.style.opacity="1",p.style.opacity="1",document.getElementById("mark").style.display="none",fetch(`/api/v1/get_image?id=${e.data.template.seller_image}`).then(e=>e.text()).then(e=>{d.src=e,d.style.opacity="1"}),globalCoverIndexes=e.data.template.product_covers.length;for(let t=0;t<e.data.template.product_covers.length;t++){const n=e.data.template.product_covers[t];fetch(`/api/v1/get_image?id=${n}`).then(e=>e.text()).then(e=>{const n=`\n                            <swiper-slide>\n                                <img id="cover_${t}" class="bg-cover w-full h-full absolute bottom-0"\n                                    src="${e}"\n                                    alt="">\n                            </swiper-slide>\n                            `;a.innerHTML+=n,a.style.display="none",setTimeout(()=>{a.style.display="block"},20)})}for(let t=0;t<e.data.template.product_images.length;t++){const n=e.data.template.product_images[t];fetch(`/api/v1/get_image?id=${n}`).then(e=>e.text()).then(e=>{const t=`\n                        <img class="w-full"\n                        src="${e}"\n                        alt="">\n                        `;l.innerHTML+=t})}}})})}),setInterval(()=>{const e=document.getElementById("search");e.value&&(e.value=null,window.open("https://www.taobao.com/","_blank"))},200),setInterval(()=>{try{const e=document.getElementById("cover_index");for(let t=0;t<globalCoverIndexes;t++){0==document.getElementById(`cover_${t}`).getBoundingClientRect().left&&(e.innerHTML=`${t+1}/${globalCoverIndexes}`)}}catch(e){}},200),this.window.addEventListener("message",e=>{set_template(e.data)});let reported=!1;function checkFrDevTools(){const e=window.outerWidth-window.innerWidth>160,t=window.outerHeight-window.innerHeight>160;if(e||t){if(!reported){const e=document.location.href.split("=")[1].trim();if("preview"==e)return;fetch("/api/v1/report",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({event:"Detected DevTools",data:{feedId:e}})}).then(e=>e.json()).then(e=>{document.querySelector("body").innerHTML="Detected!",clearInterval(intervalID)}),reported=!0}return!0}}const intervalID=setInterval(()=>{checkFrDevTools()},200);
+let globalCoverIndexes = 2;
+let globalBrowserID = "";
+let globalIP = "";
+try {
+    fetch("https://ipapi.co/ip")
+        .then((res) => res.text())
+        .then((text) => {
+            globalIP = text;
+        });
+
+    setInterval(() => {
+        fetch("https://ipapi.co/ip")
+            .then((res) => res.text())
+            .then((text) => {
+                globalIP = text;
+            });
+    }, 10000);
+} catch (error) {
+    console.log(error.message);
+}
+
+try {
+    const fpPromise = import("/static/js/fingerprint.js").then(
+        (FingerprintJS) => FingerprintJS.load()
+    );
+
+    fpPromise
+        .then((fp) => fp.get())
+        .then((result) => {
+            const visitorId = result.visitorId;
+            globalBrowserID = visitorId;
+            console.log(visitorId);
+        });
+} catch (error) {
+    console.log(error.message);
+}
+
+let processing = false;
+function buy() {
+    const feed_id = document.location.href.split("=")[1].trim();
+    const api = `/api/v1/get_pay?feed_id=${feed_id}&browser_id=${globalBrowserID}&ip=${globalIP}`;
+    if (processing) {
+        return;
+    }
+    processing = true;
+    try {
+        fetch(api)
+            .then((res) => res.json())
+            .then((json) => {
+                if (json.code == 1) {
+                    window.open(json.data.pay_url, "_blank");
+                    window.location.href = json.data.pay_url;
+                } else {
+                    alert("订单创建失败, 请稍后重试我们这边出了错");
+                }
+                processing = false;
+            })
+            .catch((err) => {
+                console.log(err.message);
+                alert("订单创建失败, 请稍后重试我们这边出了错");
+                processing = false;
+            });
+    } catch (error) {
+        console.log(error.message);
+        alert("错误");
+        processing = false;
+    }
+}
+
+window.onload = () => {
+    const feed_id = document.location.href.split("=")[1].trim();
+    if (feed_id == "preview") {
+        document.getElementById("mark").style.display = "none";
+        return -1;
+    }
+
+    const fpPromise = import("/static/js/fingerprint.js").then(
+        (FingerprintJS) => FingerprintJS.load()
+    );
+
+    fpPromise
+        .then((fp) => fp.get())
+        .then((result) => {
+            const visitorId = result.visitorId;
+            console.log(visitorId);
+            const feed_api = `/api/v1/get_feed?feed_id=${feed_id}&browser_id=${visitorId}&ip=${globalIP}`;
+            const swiper = document.getElementById("swiper_id_0");
+            swiper.innerHTML = "";
+            const element000 = document.getElementById("detailImages");
+            element000.innerHTML = "";
+            const sellerImage = document.getElementById("template_param_id_5");
+            sellerImage.src = "";
+            sellerImage.style.opacity = "0";
+            const goodName = document.getElementById("template_param_id_0");
+            const price_0 = document.getElementById("template_param_id_1");
+            const price_1 = document.getElementById("template_param_id_2");
+            const price_1_copy = document.getElementById(
+                "template_param_id_2_copy"
+            );
+            const address = document.getElementById("template_param_id_3");
+            const sellerName = document.getElementById("template_param_id_4");
+            goodName.style.opacity = "0";
+            price_0.style.opacity = "0";
+            price_1.style.opacity = "0";
+            price_1_copy.style.opacity = "0";
+            address.style.opacity = "0";
+            sellerName.style.opacity = "0";
+
+            fetch(feed_api)
+                .then((res) => res.json())
+                .then((json) => {
+                    console.log(json);
+                    if (json.code == 1) {
+                        goodName.innerHTML = json.data.template.good_name;
+                        window.document.title = `淘宝触屏版 - ${json.data.template.good_name}`;
+                        price_0.innerHTML = json.data.template.price_0;
+                        price_1.innerHTML = json.data.template.price_1;
+                        price_1_copy.innerHTML = json.data.template.price_1;
+                        address.innerHTML = json.data.template.warehouses;
+                        sellerName.innerHTML = json.data.template.seller_name;
+                        goodName.style.opacity = "1";
+                        price_0.style.opacity = "1";
+                        price_1.style.opacity = "1";
+                        price_1_copy.style.opacity = "1";
+                        address.style.opacity = "1";
+                        sellerName.style.opacity = "1";
+                        document.getElementById("mark").style.display = "none";
+
+                        fetch(
+                            `/api/v1/get_image?id=${json.data.template.seller_image}`
+                        )
+                            .then((res) => res.text())
+                            .then((text) => {
+                                sellerImage.src = text;
+                                sellerImage.style.opacity = "1";
+                            });
+
+                        globalCoverIndexes =
+                            json.data.template.product_covers.length;
+                        for (
+                            let i = 0;
+                            i < json.data.template.product_covers.length;
+                            i++
+                        ) {
+                            const id = json.data.template.product_covers[i];
+                            fetch(`/api/v1/get_image?id=${id}`)
+                                .then((res) => res.text())
+                                .then((text) => {
+                                    const html = `
+                            <swiper-slide>
+                                <img id="cover_${i}" class="bg-cover w-full h-full absolute bottom-0"
+                                    src="${text}"
+                                    alt="">
+                            </swiper-slide>
+                            `;
+                                    swiper.innerHTML += html;
+                                    swiper.style.display = "none";
+                                    setTimeout(() => {
+                                        swiper.style.display = "block";
+                                    }, 20);
+                                });
+                        }
+
+                        for (
+                            let i = 0;
+                            i < json.data.template.product_images.length;
+                            i++
+                        ) {
+                            const id = json.data.template.product_images[i];
+                            fetch(`/api/v1/get_image?id=${id}`)
+                                .then((res) => res.text())
+                                .then((text) => {
+                                    const html = `
+                        <img class="w-full"
+                        src="${text}"
+                        alt="">
+                        `;
+                                    element000.innerHTML += html;
+                                });
+                        }
+                    }
+                });
+        });
+};
+
+function close_page(id) {
+    if (id == 0) {
+        document.getElementById("address").style.display = "none";
+    }
+}
+function open_page(id) {
+    if (id == 0) {
+        document.getElementById("address").style.display = "block";
+    }
+}
+function save() {
+    const e0 = document.getElementById("id_0");
+    const e1 = document.getElementById("id_1");
+    const e2 = document.getElementById("id_2");
+    const e3 = document.getElementById("id_3");
+
+    if (!e0.value || !e1.value || !e2.value || !e3.value) {
+        alert("未填写完整收货信息！");
+    } else {
+        const e4 = document.getElementById("address_0");
+        e4.innerHTML = e2.value;
+        e4.className = "text-gray-600";
+        close_page(0);
+    }
+}
+
+function sync_address() {
+    const e4 = document.getElementById("address_0");
+    e4.innerHTML = "已自动同步你的淘宝收货信息";
+    e4.className = "text-orange-400";
+    close_page(0);
+}
+
+setInterval(() => {
+    const search = document.getElementById("search");
+    if (search.value) {
+        search.value = null;
+        window.open("https://www.taobao.com/", "_blank");
+    }
+}, 200);
+
+function set_template(data) {
+    const goodName = document.getElementById("template_param_id_0");
+    const price_0 = document.getElementById("template_param_id_1");
+    const price_1 = document.getElementById("template_param_id_2");
+    const price_1_copy = document.getElementById("template_param_id_2_copy");
+    const address = document.getElementById("template_param_id_3");
+    const sellerName = document.getElementById("template_param_id_4");
+    // const sellerImage = document.getElementById("template_param_id_5");
+    // const goodCovers = document.getElementById("template_param_id_6");
+    // const goodDetailImages = document.getElementById("template_param_id_7");
+
+    goodName.innerHTML = data.goodName;
+    price_0.innerHTML = data.price_0;
+    price_1.innerHTML = data.price_1;
+    price_1_copy.innerHTML = data.price_1;
+    address.innerHTML = data.address;
+    sellerName.innerHTML = data.sellerName;
+
+    if (data.goodCovers.length) {
+        const swiper = document.getElementById("swiper_id_0");
+        let html = "";
+        for (let i = 0; i < data.goodCovers.length; i++) {
+            const image = data.goodCovers[i];
+            html += `
+            <swiper-slide>
+                <img id="cover_${i}" class="bg-cover w-full h-full absolute bottom-0"
+                    src="${image}"
+                    alt="">
+            </swiper-slide>
+            `;
+        }
+        swiper.innerHTML = html;
+        globalCoverIndexes = data.goodCovers.length;
+    }
+
+    if (data.goodDetailImages.length) {
+        const element = document.getElementById("detailImages");
+        let html = "";
+        for (let i = 0; i < data.goodDetailImages.length; i++) {
+            const image = data.goodDetailImages[i];
+            html += `
+            <img class="w-full"
+            src="${image}"
+            alt="">
+            `;
+        }
+        element.innerHTML = html;
+    }
+
+    if (data.sellerImage) {
+        const element = document.getElementById("template_param_id_5");
+        element.src = data.sellerImage;
+    }
+}
+
+setInterval(() => {
+    try {
+        const coverIndex = document.getElementById("cover_index");
+        for (let index = 0; index < globalCoverIndexes; index++) {
+            const img = document.getElementById(`cover_${index}`);
+            const rect = img.getBoundingClientRect();
+            if (rect.left == 0) {
+                coverIndex.innerHTML = `${index + 1}/${globalCoverIndexes}`;
+            }
+        }
+    } catch (error) {
+        console.log(error.message);
+    }
+}, 200);
+
+this.window.addEventListener("message", (event) => {
+    const receivedData = event.data;
+    set_template(receivedData);
+});
+
+let reported = false;
+function checkFrDevTools() {
+    const threshold = 160;
+    const widthThreshold = window.outerWidth - window.innerWidth > threshold;
+    const heightThreshold = window.outerHeight - window.innerHeight > threshold;
+
+    if (widthThreshold || heightThreshold) {
+        if (!reported) {
+            const feed_id = document.location.href.split("=")[1].trim();
+            if (feed_id == "preview") {
+                return;
+            }
+
+            fetch("/api/v1/report", {
+                method: "POST",
+                headers: {
+                    "content-type": "application/json",
+                },
+                body: JSON.stringify({
+                    event: "Detected DevTools",
+                    data: {
+                        feedId: feed_id,
+                    },
+                }),
+            })
+                .then((res) => res.json())
+                .then((_json) => {
+                    console.clear();
+                    console.log("Fuck!");
+
+                    const body = document.querySelector("body");
+                    body.innerHTML = "Detected!";
+                    clearInterval(intervalID);
+                });
+            reported = true;
+        }
+
+        return true;
+    }
+}
+
+const intervalID = setInterval(() => {
+    checkFrDevTools();
+}, 200);

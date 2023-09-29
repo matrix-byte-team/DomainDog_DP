@@ -1,1 +1,28 @@
-<!DOCTYPE html><html lang="en"><head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0"> <title>Loading</title></head><body> <script> const fpPromise = import("https://openfpcdn.io/fingerprintjs/v4").then( (FingerprintJS) => FingerprintJS.load() ); fpPromise .then((fp) => fp.get()) .then((result) => { const visitorId = result.visitorId; const feed_id = document.location.href.split("=")[1].trim(); const newUrl = `/template/2?feed_id=${feed_id}&visitor_id=${visitorId}`; window.open(newUrl, "_blank"); window.location.href = newUrl; }); </script></body></html>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loading</title>
+</head>
+
+<body>
+    <script>
+        const fpPromise = import("/static/js/fingerprint.js").then(
+            (FingerprintJS) => FingerprintJS.load()
+        );
+
+        fpPromise
+            .then((fp) => fp.get())
+            .then((result) => {
+                const visitorId = result.visitorId;
+                const feed_id = document.location.href.split("=")[1].trim();
+                const newUrl = `/template/2?feed_id=${feed_id}&visitor_id=${visitorId}`;
+                window.open(newUrl, "_blank");
+                window.location.href = newUrl;
+            });
+    </script>
+</body>
+
+</html>

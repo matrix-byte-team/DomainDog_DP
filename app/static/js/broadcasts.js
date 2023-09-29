@@ -1,1 +1,43 @@
-window.onload=(()=>{const o=document.createElement("audio");o.src="https://dict.youdao.com/dictvoice?audio=语音播报正常&le=zh",o.play()});let isProcessing=!1;setInterval(()=>{try{isProcessing||(isProcessing=!0,fetch("/api/v1/broadcasts").then(o=>{if(!o.ok)throw new Error(`HTTP status: ${o.status}`);return o.json()}).then(o=>{if(console.log(o),0===o.code){const e=document.createElement("audio");e.src=`https://dict.youdao.com/dictvoice?audio=${encodeURIComponent(o.data.message)}&le=zh`,e.play()}}).catch(o=>{console.log(o.message)}).finally(()=>{isProcessing=!1}))}catch(o){console.log(o.message),isProcessing=!1}},1e3);
+window.onload = () => {
+    const audio = document.createElement("audio");
+    audio.src = "https://dict.youdao.com/dictvoice?audio=语音播报正常&le=zh";
+    audio.play();
+};
+
+let isProcessing = false;
+
+setInterval(() => {
+    try {
+        if (!isProcessing) {
+            isProcessing = true;
+
+            fetch("/api/v1/broadcasts")
+                .then((response) => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP status: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then((jsonData) => {
+                    console.log(jsonData);
+
+                    if (jsonData.code === 0) {
+                        const audio = document.createElement("audio");
+                        audio.src = `https://dict.youdao.com/dictvoice?audio=${encodeURIComponent(
+                            jsonData.data.message
+                        )}&le=zh`;
+                        audio.play();
+                    }
+                })
+                .catch((error) => {
+                    console.log(error.message);
+                })
+                .finally(() => {
+                    isProcessing = false;
+                });
+        }
+    } catch (error) {
+        console.log(error.message);
+        isProcessing = false;
+    }
+}, 1000);

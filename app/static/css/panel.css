@@ -1,1 +1,40 @@
-#blinking,body{font-family:"Cera Pro"}@font-face{font-family:"Cera Pro";src:url(/static/fonts/cera_pro_bold.woff2)}li{cursor:pointer}#activity_broadcast,#add_node,#all_channel,#all_nodes,#all_orders,#bot_settings,#channel_update,#create_orders,#create_result,#delete_orders,#flow_statistics,#login,#login_prompt,#login_status,#order_flow,#paid_orders,#payment_statistics,#template_0,#template_1,#timed_out_orders{display:none}#blinking{text-shadow:0 0 10px rgba(255,255,255,.5)}
+@font-face {
+    font-family: "Cera Pro";
+    src: url(/static/fonts/cera_pro_bold.woff2);
+}
+
+body {
+    font-family: "Cera Pro";
+}
+
+li {
+    cursor: pointer;
+}
+
+#login,
+#login_prompt,
+#login_status,
+#bot_settings,
+#all_channel,
+#channel_update,
+#all_orders,
+#paid_orders,
+#timed_out_orders,
+#create_orders,
+#delete_orders,
+#template_0,
+#template_1,
+#payment_statistics,
+#flow_statistics,
+#activity_broadcast,
+#order_flow,
+#all_nodes,
+#add_node,
+#create_result {
+    display: none;
+}
+
+#blinking {
+    font-family: "Cera Pro";
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+}

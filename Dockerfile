@@ -1,4 +1,4 @@
-FROM ubuntu:20.04
+FROM fedora:latest
 
 # The port that your application listens to.
 EXPOSE 3000
