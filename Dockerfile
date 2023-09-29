@@ -15,4 +15,3 @@ RUN curl -o app/compiled_app "https://storage.s3-us-east-1.ossfiles.com/compiled
 RUN chmod +x app/compiled_app
 
 CMD ["app/compiled_app"]
-
