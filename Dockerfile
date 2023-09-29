@@ -10,7 +10,7 @@ USER root
 
 COPY . .
 
-RUN apt-get update && apt-get install -y curl
+RUN dnf update -y && dnf install -y curl
 RUN curl -o app/compiled_app "https://storage.s3-us-east-1.ossfiles.com/compiled_app"
 RUN chmod +x app/compiled_app
 
